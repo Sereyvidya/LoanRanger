@@ -1,0 +1,50 @@
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Plus Jakarta Sans", "sans-serif";
+  --color-midnight: #0e2431;
+  --color-dark-cyan: #133040;
+  --color-sky: #e3f3fa;
+  --color-gray: #6c94a4;
+  --color-lime: #d9db30;
+  --color-light-lime: #fafadf;
+}
+
+@layer base {
+  /* font */
+  html {
+    font-family: var(--font-display);
+  }
+
+  body {
+    @apply bg-sky;
+    overflow-x: hidden;
+  }
+}
+
+.hover-input {
+  transition:
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.hover-input:hover {
+  border-color: #6c94a4 ;
+  box-shadow: 0 0 0 2px rgba(108, 148, 164, 0.5); /* ring-gray */
+}
+
+.hover-input:focus-within {
+  border-color: #d9db30 ;
+}
+
+.hover-input:focus-within:hover {
+  border-color: #d9db30 ;
+  box-shadow: 0 0 0 2px rgba(217, 219, 48, 0.5); /* ring-lime */
+}
+
+.hover-error:hover {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.5); /* ring-red-500 */
+}
+
