@@ -1,12 +1,75 @@
-# React + Vite
+# 🏠 LoanRanger
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Calculate monthly mortgage repayments based on loan amount, interest rate, term, and mortgage type. Built with a clean UI and responsive layout using React, Vite, and Tailwind CSS.
 
-Currently, two official plugins are available:
+## 🚀 Live Demo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Check it out here: [https://loan-ranger.vercel.app/](https://loan-ranger.vercel.app/)
 
-## Expanding the ESLint configuration
+## ✨ Features
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- 🧮 Calculate **monthly repayments** and **total repayment**
+- 📊 Choose between **Repayment** and **Interest-Only** mortgages
+- 💸 Input loan amount, interest rate, and term (with validation)
+- 🌐 Fully responsive and mobile-friendly
+- ⚡ Built with **React**, **Vite**, and **Tailwind CSS**
+
+## 📸 Screenshot
+
+![Screenshot](./default.jpg)
+![Screenshot](./sample.jpg)
+
+## 💡 Getting Started
+
+### 1. Clone the repo
+
+```bash
+git clone https://github.com/Sereyvidya/LoanRanger
+cd LoanRanger
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Run the development server
+
+```bash
+npm run dev
+```
+
+App will be running at: `http://localhost:5173`
+
+## 🛠 Tech Stack
+
+- ⚛️ React
+- ⚡ Vite
+- 🎨 Tailwind CSS
+- 📦 `react-icons`
+
+## 📁 Folder Structure
+
+```bash
+├── public/
+│   └── calculator.svg
+├── src/
+│   ├── components/
+│   │   ├── CalculatorForm.jsx
+│   │   └── MortgageResult.jsx
+│   ├── utils/
+│   │   └── helper.js
+│   ├── App.jsx
+│   └── index.css
+├── index.html
+└── package.json
+```
+
+## 🙌 Credits
+
+- - Inspired by the [Mortgage repayment calculator](https://www.frontendmentor.io/challenges/mortgage-repayment-calculator-Galx1LXK73) challenge from Frontend Mentor.
+
+## 🪪 License
+
+MIT — free to use, remix, and build upon!
