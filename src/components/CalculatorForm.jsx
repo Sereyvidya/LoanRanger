@@ -1,13 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaDollarSign } from "react-icons/fa";
 import { FaCalculator } from "react-icons/fa";
 import { formatWithCommas, calculate } from "../utils/helper";
+import { translations } from "../utils/translation";
 
 const MAX_AMOUNT = 10000000;
 const MAX_TERM = 50;
 const MAX_RATE = 40;
 
-const CalculatorForm = ({ setRepayment, setTotal }) => {
+const CalculatorForm = ({ language, setLanguage, setRepayment, setTotal }) => {
+  const {
+    title,
+    clear,
+    mortgageAmount,
+    mortgageTerm,
+    years,
+    interestRate,
+    mortgageType,
+    repayment,
+    interestOnly,
+    calculateRepayment,
+  } = translations[language];
+
   const [formData, setFormData] = useState({
     amt: "",
     term: "",
@@ -38,6 +52,11 @@ const CalculatorForm = ({ setRepayment, setTotal }) => {
     setTotal("-1");
   };
 
+  const getErrorMessage = (key) => {
+    if (!key) return "";
+    return translations[language][key] || "";
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -49,10 +68,10 @@ const CalculatorForm = ({ setRepayment, setTotal }) => {
       typeError: "",
     };
 
-    if (!amt) newErrors.amtError = "This field is required";
-    if (!term) newErrors.termError = "This field is required";
-    if (!rate) newErrors.rateError = "This field is required";
-    if (!type) newErrors.typeError = "This field is required";
+    if (!amt) newErrors.amtError = "requiredField";
+    if (!term) newErrors.termError = "requiredField";
+    if (!rate) newErrors.rateError = "requiredField";
+    if (!type) newErrors.typeError = "requiredTypeField";
 
     setFormError(newErrors);
 
@@ -73,12 +92,12 @@ const CalculatorForm = ({ setRepayment, setTotal }) => {
       if (amt > MAX_AMOUNT) {
         setFormError((prev) => ({
           ...prev,
-          amtError: "Max amount reached",
+          amtError: "maxAmountError",
         }));
       } else if (amt < 0) {
         setFormError((prev) => ({
           ...prev,
-          amtError: "Invalid amount",
+          amtError: "invalidAmount",
         }));
       } else {
         setFormData((prev) => ({ ...prev, amt: raw }));
@@ -90,7 +109,7 @@ const CalculatorForm = ({ setRepayment, setTotal }) => {
     } else {
       setFormError((prev) => ({
         ...prev,
-        amtError: "Invalid amount",
+        amtError: "invalidAmount",
       }));
     }
   };
@@ -103,12 +122,12 @@ const CalculatorForm = ({ setRepayment, setTotal }) => {
       if (term > MAX_TERM) {
         setFormError((prev) => ({
           ...prev,
-          termError: "Max term reached",
+          termError: "maxTermError",
         }));
       } else if (term < 0) {
         setFormError((prev) => ({
           ...prev,
-          termError: "Invalid term",
+          termError: "invalidTerm",
         }));
       } else {
         setFormData((prev) => ({ ...prev, term: raw }));
@@ -120,7 +139,7 @@ const CalculatorForm = ({ setRepayment, setTotal }) => {
     } else {
       setFormError((prev) => ({
         ...prev,
-        termError: "Invalid term",
+        termError: "invalidTerm",
       }));
     }
   };
@@ -133,12 +152,12 @@ const CalculatorForm = ({ setRepayment, setTotal }) => {
       if (rate > MAX_RATE) {
         setFormError((prev) => ({
           ...prev,
-          rateError: "Max rate reached",
+          rateError: "maxRateError",
         }));
       } else if (rate < 0) {
         setFormError((prev) => ({
           ...prev,
-          rateError: "Invalid rate p",
+          rateError: "invalidRate",
         }));
       } else {
         // Store raw instead of the parsed
@@ -151,26 +170,29 @@ const CalculatorForm = ({ setRepayment, setTotal }) => {
     } else {
       setFormError((prev) => ({
         ...prev,
-        rateError: "Invalid rate",
+        rateError: "invalidRate",
       }));
     }
   };
 
   return (
     <div className="flex w-full flex-col gap-8 bg-white p-5 sm:w-1/2 sm:rounded-l-2xl">
-      <div className="flex justify-between">
-        <h1 className="text-dark-cyan font-bold">Mortgage Calculator</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-dark-cyan font-bold">{title}</h1>
         <button
-          className="text-gray mt-1 text-xs hover:underline"
-          onClick={() => clearForm()}
+          onClick={() => setLanguage((prev) => (prev === "en" ? "kh" : "en"))}
+          className="w-7 transition-transform hover:scale-110"
+          aria-label="Toggle language"
         >
-          Clear All
+          <div className="h-8 w-8">
+            <img src={language === "en" ? "./kh.png" : "./uk.png"} />
+          </div>
         </button>
       </div>
 
       <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
         <div className="flex flex-col gap-2">
-          <p className="text-gray text-sm">Mortgage Amount</p>
+          <p className="text-gray text-sm">{mortgageAmount}</p>
           <label
             className={`hover-input focus-within:bg-light-lime flex flex-row-reverse rounded-sm border ${formError.amtError ? "hover-error border-red-500" : "border-gray"}`}
           >
@@ -189,13 +211,15 @@ const CalculatorForm = ({ setRepayment, setTotal }) => {
             </div>
           </label>
           {formError.amtError && (
-            <p className="text-xs text-red-500">{formError.amtError}</p>
+            <p className="text-xs text-red-500">
+              {getErrorMessage(formError.amtError)}
+            </p>
           )}
         </div>
 
         <div className="flex w-full gap-5">
           <div className="flex w-1/2 flex-col gap-2">
-            <p className="text-gray text-xs">Mortgage Term</p>
+            <p className="text-gray text-xs">{mortgageTerm}</p>
             <label
               className={`hover-input focus-within:bg-light-lime ${formError.termError ? "hover-error border-red-500" : "border-gray"} flex rounded-sm border`}
             >
@@ -210,16 +234,18 @@ const CalculatorForm = ({ setRepayment, setTotal }) => {
               <div
                 className={`peer-focus:bg-lime peer-focus:text-dark-cyan ${formError.termError ? "rounded-r-xs bg-red-500 text-white" : "bg-sky text-gray rounded-r-sm"} flex h-[40px] w-[45px] items-center justify-center px-[10px]`}
               >
-                <p className="text-xs font-bold">years</p>
+                <p className="text-xs font-bold">{years}</p>
               </div>
             </label>
             {formError.termError && (
-              <p className="text-xs text-red-500">{formError.termError}</p>
+              <p className="text-xs text-red-500">
+                {getErrorMessage(formError.termError)}
+              </p>
             )}
           </div>
 
           <div className="flex w-1/2 flex-col gap-2">
-            <p className="text-gray text-xs">Interest Rate</p>
+            <p className="text-gray text-xs">{interestRate}</p>
             <label
               className={`hover-input focus-within:bg-light-lime ${formError.rateError ? "hover-error border-red-500" : "border-gray"} flex rounded-sm border`}
             >
@@ -238,13 +264,15 @@ const CalculatorForm = ({ setRepayment, setTotal }) => {
               </div>
             </label>
             {formError.rateError && (
-              <p className="text-xs text-red-500">{formError.rateError}</p>
+              <p className="text-xs text-red-500">
+                {getErrorMessage(formError.rateError)}
+              </p>
             )}
           </div>
         </div>
 
         <div className="flex flex-col gap-2">
-          <p className="text-gray text-xs">Mortgage Type</p>
+          <p className="text-gray text-xs">{mortgageType}</p>
           <div className="flex flex-col gap-2">
             <label className="hover-input focus-within:bg-light-lime border-gray flex h-[40px] items-center gap-3 rounded-sm border px-4">
               <input
@@ -258,7 +286,7 @@ const CalculatorForm = ({ setRepayment, setTotal }) => {
                   setFormError((prev) => ({ ...prev, typeError: "" }));
                 }}
               />
-              <p className="text-dark-cyan text-sm font-bold">Repayment</p>
+              <p className="text-dark-cyan text-sm font-bold">{repayment}</p>
             </label>
 
             <label className="hover-input focus-within:bg-light-lime accent-gray border-gray flex h-[40px] items-center gap-3 rounded-sm border px-4">
@@ -273,18 +301,30 @@ const CalculatorForm = ({ setRepayment, setTotal }) => {
                   setFormError((prev) => ({ ...prev, typeError: "" }));
                 }}
               />
-              <p className="text-dark-cyan text-sm font-bold">Interest Only</p>
+              <p className="text-dark-cyan text-sm font-bold">{interestOnly}</p>
             </label>
             {formError.typeError && (
-              <p className="text-xs text-red-500">{formError.typeError}</p>
+              <p className="text-xs text-red-500">
+                {getErrorMessage(formError.typeError)}
+              </p>
             )}
           </div>
+        </div>
+
+        <div className="relative">
+          <button
+            type="button"
+            className="text-gray absolute right-0 text-xs hover:underline"
+            onClick={clearForm}
+          >
+            {clear}
+          </button>
         </div>
 
         <button className="bg-lime hover:bg-light-lime border-lime focus:bg-light-lime mt-3 flex h-[40px] cursor-pointer items-center justify-center gap-1 rounded-full border transition-shadow duration-200 ease-in-out hover:border-2 hover:ring-2 hover:ring-[rgba(217,219,48,0.5)] focus:outline-none">
           <FaCalculator className="text-dark-cyan" />
           <p className="text-dark-cyan text-sm font-bold">
-            Calculate Repayments
+            {calculateRepayment}
           </p>
         </button>
       </form>

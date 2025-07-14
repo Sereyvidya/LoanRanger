@@ -11,13 +11,16 @@ Check it out here: [https://loan-ranger.vercel.app/](https://loan-ranger.vercel.
 - 🧮 Calculate **monthly repayments** and **total repayment**
 - 📊 Choose between **Repayment** and **Interest-Only** mortgages
 - 💸 Input loan amount, interest rate, and term (with validation)
+- 🇰🇭 English to Khmer translation
 - 🌐 Fully responsive and mobile-friendly
 - ⚡ Built with **React**, **Vite**, and **Tailwind CSS**
 
 ## 📸 Screenshot
 
-![Screenshot](./default.jpg)
-![Screenshot](./sample.jpg)
+![Screenshot](./enDefault.png)
+![Screenshot](./enSample.png)
+![Screenshot](./khDefault.png)
+![Screenshot](./khSample.png)
 
 ## 💡 Getting Started
 
@@ -53,7 +56,9 @@ App will be running at: `http://localhost:5173`
 
 ```bash
 ├── public/
-│   └── calculator.svg
+│   ├── calculator.svg
+│   ├── kh.png
+│   └── uk.png
 ├── src/
 │   ├── components/
 │   │   ├── CalculatorForm.jsx
